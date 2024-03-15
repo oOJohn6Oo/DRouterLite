@@ -12,6 +12,7 @@ import org.gradle.api.provider.ListProperty
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
+import org.jetbrains.kotlin.konan.file.use
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -88,7 +89,9 @@ abstract class RouterTransform @Inject constructor(
         val jarOutput = JarOutputStream(BufferedOutputStream(FileOutputStream(output.get().asFile)))
         val insertTag = mutableSetOf<String>()
         inputFiles.forEach { input ->
-            if (input.isFile && input.name.lowercase().endsWith(".jar")) {
+            if(input.name.contains("bcprov", true)){
+                Logger.e("${input.name} is not allowed in project")
+            }else if (input.isFile && input.name.lowercase().endsWith(".jar")) {
                 val jarFile = JarFile(input)
                 for (jarEntry in jarFile.entries()) {
                     if (!insertTag.contains(jarEntry.name)) {

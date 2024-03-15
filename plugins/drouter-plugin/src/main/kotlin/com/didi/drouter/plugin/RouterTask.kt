@@ -194,9 +194,9 @@ class RouterTask(
         val tempClassClassify = classClassify ?: return
         if (!TextUtil.excludeJarNameFile(file.name)) {
             val jar = JarFile(createFile(file, ".jar"))
-            val entries = jar.entries()
-            while (entries.hasMoreElements()) {
-                val entry = entries.nextElement()
+            jar.entries().asSequence().filterNot {
+                isJarSignatureRelatedFiles(it.name)
+            }.forEach { entry ->
                 val entryName = entry.name
                 if (entryName.endsWith(".class")) {
                     count.incrementAndGet()
@@ -221,10 +221,13 @@ class RouterTask(
                                         " entry=" + entry.name +
                                         " exception=" + e.message)
                             )
-                            throw e
+                            if (e.message?.contains("digest error") != true) {
+                                throw e
+                            }
                         }
                     }
                 }
+
             }
             jar.close()
         }
@@ -267,5 +270,13 @@ class RouterTask(
             return wFile
         }
         return file
+    }
+
+
+
+    private val JAR_SIGNATURE_EXTENSIONS = setOf("SF", "RSA", "DSA", "EC")
+
+    private fun isJarSignatureRelatedFiles(name: String): Boolean {
+        return name.startsWith("META-INF/") && name.substringAfterLast('.') in JAR_SIGNATURE_EXTENSIONS
     }
 }
