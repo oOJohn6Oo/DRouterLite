@@ -1,0 +1,46 @@
+[versions]
+agp = "8.3.1"
+kotlin = "1.9.20"
+appcompat = "1.6.1"
+material = "1.11.0"
+kotlin-poet = "1.16.0"
+kotlin-ksp = "1.9.20-1.0.14"
+kotlin-dsl = "4.2.1"
+androidx-startup = "1.1.1"
+gradle-publish = "1.0.0"
+drouter-collector = "1.0.0-alpha01"
+drouter-assembler = "1.0.0-alpha01"
+drouter-api = "1.0.0-alpha01"
+drouter-api-annotation = "1.0.0-alpha01"
+core-ktx = "1.12.0"
+junit = "4.13.2"
+junit-version = "1.1.5"
+espresso-core = "3.5.1"
+asm = "9.7"
+
+[libraries]
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-startup = {group = "androidx.startup", name = "startup-runtime", version.ref = "androidx-startup"}
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kotlin-poet = { group = "com.squareup", name = "kotlinpoet", version.ref = "kotlin-poet" }
+kotlin-ksp = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "kotlin-ksp" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+drouter-collector = { group = "io.john6.router.drouterlite", name = "collector", version.ref = "drouter-collector" }
+drouter-api = { group = "io.john6.router.drouterlite", name = "api", version.ref = "drouter-api" }
+drouter-annotation = { group = "io.john6.router.drouterlite", name = "api-annotation", version.ref = "drouter-api-annotation" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit-version" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+asm = {group = "org.ow2.asm", name = "asm", version.ref = "asm"}
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-dsl = { id = "org.gradle.kotlin.kotlin-dsl", version.ref = "kotlin-dsl" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
+gradle-publish = { id = "com.gradle.plugin-publish", version.ref = "gradle-publish" }
+drouter-assembler = {id = "io.john6.router.drouterlite.assembler", version.ref = "drouter-assembler"}

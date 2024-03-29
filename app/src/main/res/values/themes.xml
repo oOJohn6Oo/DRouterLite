@@ -1,0 +1,39 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.AppBase" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <!--        LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT-->
+        <!--        没有设置的情况下默认此标记，只有状态栏区域可见的情况下，才意味着加了FLAG_FULLSCREEN or SYSTEM_UI_FLAG_FULLSCREEN标记的应用窗口都会被切边放在刘海以下-->
+        <!--        -->
+        <!--        LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES-->
+        <!--        此flag下不进行应用窗口短边的限制，窗口可以显示到刘海区域-->
+
+        <!--        -->
+        <!--        LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER-->
+        <!--        此flag下应用窗口一直被限制在刘海区域以下-->
+
+        <!--        LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS-->
+        <!--        Added in API level 30-->
+        <!--        此flag下不进行任何应用窗口的限制，窗口可以显示到刘海区域-->
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
+    </style>
+
+    <style name="Theme.CERouter" parent="Theme.AppBase">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+        <item name="colorSurface">@color/white</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+    </style>
+</resources>
