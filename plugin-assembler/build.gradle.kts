@@ -42,6 +42,7 @@ gradlePlugin {
             implementationClass = "io.john6.router.drouterlite.pluginassembler.AssembleRouterByAddingSourcePlugin"
             displayName = "io.john6.router.drouterlite.assembler.gradle.plugin"
             description = "gradle plugin to assemble router stuff for DRouterLite"
+            tags.set(listOf("android", "router", "android-modularization"))
         }
     }
 }
