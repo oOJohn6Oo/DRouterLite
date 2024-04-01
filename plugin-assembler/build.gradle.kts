@@ -32,6 +32,8 @@ group = "io.john6.router.drouterlite"
 version = "1.0.0-alpha01"
 
 gradlePlugin {
+    website.set("https://github.com/oOJohn6Oo/DRouterLite")
+    vcsUrl.set("https://github.com/oOJohn6Oo/DRouterLite")
     plugins {
         create("DRouterLiteAssemble") {
             // 仅影响本地模块依赖时的名字以及使用 java-gradle-plugin 插件发布时有影响
