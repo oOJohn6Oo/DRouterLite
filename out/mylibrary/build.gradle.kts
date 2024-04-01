@@ -30,7 +30,7 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
@@ -41,7 +41,7 @@ android {
 dependencies {
     val localProperties = Properties()
     localProperties.load(project.rootProject.file("local.properties").inputStream())
-    val routerLocalTest = localProperties["drouter_lite_local_test"].toString().toBooleanStrictOrNull() ?: true
+    val routerLocalTest = localProperties["drouter_lite_local_test"].toString().toBooleanStrictOrNull() ?: false
 
     implementation(libs.material)
     if(routerLocalTest) {

@@ -3,7 +3,7 @@ plugins {
     id("maven-publish")
 }
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_17
     withJavadocJar()
     withSourcesJar()
@@ -19,6 +19,8 @@ publishing{
         }
     }
     repositories {
-        maven("https://jitpack.io")
+        maven("https://jitpack.io"){
+            name = "jitpack"
+        }
     }
 }

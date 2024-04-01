@@ -58,7 +58,7 @@ dependencies {
 
     val localProperties = Properties()
     localProperties.load(project.rootProject.file("local.properties").inputStream())
-    val routerLocalTest = localProperties["drouter_lite_local_test"].toString().toBooleanStrictOrNull() ?: true
+    val routerLocalTest = localProperties["drouter_lite_local_test"].toString().toBooleanStrictOrNull() ?: false
     if(routerLocalTest) {
         // 路由 API
         implementation(project(":drouter-api"))

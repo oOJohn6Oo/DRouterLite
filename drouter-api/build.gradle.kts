@@ -8,7 +8,7 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_17
 }
 
@@ -49,7 +49,7 @@ dependencies {
 
     val localProperties = Properties()
     localProperties.load(project.rootProject.file("local.properties").inputStream())
-    val routerLocalTest = localProperties["drouter_lite_local_test"].toString().toBooleanStrictOrNull() ?: true
+    val routerLocalTest = localProperties["drouter_lite_local_test"].toString().toBooleanStrictOrNull() ?: false
 
     if(routerLocalTest) {
         api(project(":drouter-api-annotation"))
@@ -69,7 +69,9 @@ afterEvaluate {
             }
         }
         repositories {
-            maven("https://jitpack.io")
+            maven("https://jitpack.io"){
+                name = "jitpack"
+            }
         }
     }
 }
