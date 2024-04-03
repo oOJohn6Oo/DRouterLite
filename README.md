@@ -5,9 +5,9 @@
 ### 实现功能
 
 - [x] Activity 跳转
-- [] Fragment 跳转 TODO
+- [ ] Fragment 跳转 TODO
 - [x] 服务发现
-- [] assembler 自动发现应用了 collector 的模块
+- [ ] assembler 自动发现应用了 collector 的模块
 
 ### 接入
 
