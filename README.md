@@ -7,13 +7,14 @@
 - [x] Activity 跳转
 - [] Fragment 跳转 TODO
 - [x] 服务发现
+- [] assembler 自动发现应用了 collector 的模块
 
 ### 接入
 
 1. 在 base 模块依赖 `drouter-lite-api`
 
 ``` kotlin
-api("io.john6.router.drouterlite:api:1.0.0-alpha01")
+api("io.github.oojohn6oo:drouterlite-api:1.0.0-alpha01")
 
 ```
 
@@ -25,7 +26,7 @@ plugins {
 }
 ...
 dependencies {
-    ksp("io.john6.router.drouterlite:collector:1.0.0-alpha01")
+    ksp("io.github.oojohn6oo:drouterlite-collector:1.0.0-alpha02")
 }
 
 ```
@@ -33,7 +34,7 @@ dependencies {
 
 ``` kotlin
 plugins {
-    id("io.john6.router.drouterlite.assembler")
+    id("io.github.oojohn6oo:drouterlite-assembler")
 }
 ```
 
@@ -54,9 +55,11 @@ plugins {
 
 ### 调试说明
 
-* `gradle.properties` 中 `router_local_test` 为 true 使用本地测试
+* `local.properties` 中 `dRouterLiteLocalTest` 为 true 使用本地测试
+* 测试通过 [DRouterLiteTestSuite]
 
 
 
 [DRouter]: https://github.com/didi/DRouter
 [KSP]: https://github.com/google/ksp
+[DRouterLiteTestSuite]: ./app/src/androidTest/kotlin/io/john6/router/drouterlite/DRouterLiteTestSuite.kt

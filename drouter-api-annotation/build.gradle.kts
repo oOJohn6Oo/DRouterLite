@@ -1,26 +1,40 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    id("maven-publish")
+    alias(libs.plugins.kotlin.dokka)
+    alias(libs.plugins.maven.publish)
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_17
-    withJavadocJar()
-    withSourcesJar()
 }
 
-publishing{
-    publications {
-        create<MavenPublication>("DRouterLiteAPIAnnotation") {
-            groupId = "io.john6.router.drouterlite"
-            artifactId = "api-annotation"
-            version = "1.0.0-alpha01"
-            from(components["java"])
+mavenPublishing {
+    coordinates("io.github.oojohn6oo", "drouterlite-annotation", "1.0.0-alpha01")
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+    pom {
+        name.set("DRouterLite-API-Annotation")
+        description.set("Annotation for DRouterLite")
+        url.set("https://github.com/oOJohn6Oo/DRouterLite")
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
         }
-    }
-    repositories {
-        maven("https://jitpack.io"){
-            name = "jitpack"
+        developers {
+            developer {
+                id = "oOJohn6Oo"
+                name = "John6"
+                email = "john6.lq@gmail.com"
+            }
+        }
+        scm {
+            connection.set("scm:git:git://github.com/oOJohn6Oo/DRouterLite.git")
+            developerConnection.set("scm:git:ssh://github.com/oOJohn6Oo/DRouterLite.git")
+            url.set("https://github.com/oOJohn6Oo/DRouterLite")
         }
     }
 }

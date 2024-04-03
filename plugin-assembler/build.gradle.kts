@@ -28,7 +28,7 @@ dependencies{
     implementation(libs.asm)
 }
 
-group = "io.john6.router.drouterlite"
+group = "io.github.oojohn6oo"
 version = "1.0.0-alpha01"
 
 gradlePlugin {
@@ -38,9 +38,9 @@ gradlePlugin {
         create("DRouterLiteAssemble") {
             // 仅影响本地模块依赖时的名字以及使用 java-gradle-plugin 插件发布时有影响
             // 具体参考 https://docs.gradle.org/current/userguide/plugins.html#sec:plugin_markers
-            id = "io.john6.router.drouterlite.assembler"
+            id = "io.github.oojohn6oo.drouterlite.assembler"
             implementationClass = "io.john6.router.drouterlite.pluginassembler.AssembleRouterByAddingSourcePlugin"
-            displayName = "io.john6.router.drouterlite.assembler.gradle.plugin"
+            displayName = "io.github.oojohn6oo.drouterlite.assembler.gradle.plugin"
             description = "gradle plugin to assemble router stuff for DRouterLite"
             tags.set(listOf("android", "router", "android-modularization"))
         }

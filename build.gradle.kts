@@ -1,3 +1,15 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
+val localProperties = Properties()
+localProperties.load(project.rootProject.file("local.properties").inputStream())
+val localTestFlag = localProperties["dRouterLiteLocalTest"].toString().toBooleanStrictOrNull() ?: false
+
+project.ext["dRouterLiteLocalTest"] = localTestFlag
+
+val dRouterLiteLocalTest:Boolean by project.ext
+
+println("dRouterLiteLocalTest $dRouterLiteLocalTest")
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     alias(libs.plugins.androidApplication) apply false

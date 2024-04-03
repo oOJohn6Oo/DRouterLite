@@ -56,15 +56,15 @@ dependencies {
     implementation(libs.material)
     runtimeOnly(project(":out:mylibrary"))
 
-    val localProperties = Properties()
-    localProperties.load(project.rootProject.file("local.properties").inputStream())
-    val routerLocalTest = localProperties["drouter_lite_local_test"].toString().toBooleanStrictOrNull() ?: false
-    if(routerLocalTest) {
+    val dRouterLiteLocalTest: Boolean by rootProject.ext
+    if(dRouterLiteLocalTest) {
+        println("app local")
         // 路由 API
         implementation(project(":drouter-api"))
         // 路由收集插件
         ksp(project(":plugin-collector"))
     }else{
+        println("app remote")
         implementation(libs.drouter.api)
         ksp(libs.drouter.collector)
     }

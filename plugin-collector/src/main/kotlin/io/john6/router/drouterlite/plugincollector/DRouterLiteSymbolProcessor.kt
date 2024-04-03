@@ -21,7 +21,7 @@ fun OutputStream.appendText(str: String) {
  */
 class DRouterLiteSymbolProcessor(
     private val codeGenerator: CodeGenerator,
-    private val options: Map<String, String>
+    private val options: Map<String, String>,
 ) : SymbolProcessor {
     private var file: OutputStream? = null
     private var invoked = false
@@ -50,7 +50,6 @@ class DRouterLiteSymbolProcessor(
      *
      *
      */
-    @OptIn(KspExperimental::class)
     override fun process(resolver: Resolver): List<KSAnnotated> {
         if (invoked) {
             return emptyList()
@@ -123,7 +122,7 @@ class DRouterLiteSymbolProcessor(
     import java.util.HashMap
     
     object ${moduleName}ServiceLoader {
-        @Suppress("UNUSED_PARAMETER")
+        @Suppress("UNUSED_PARAMETER", "USELESS_CAST")
         fun loadAll(map: Map<Class<*>, Any>) {
     ${
                 serviceMap.keys.joinToString(System.lineSeparator()) {
@@ -193,7 +192,7 @@ class DRouterLiteSymbolProcessor(
     import java.util.HashMap
     
     object ${moduleName}RouterLoader {
-        @Suppress("UNUSED_PARAMETER")
+        @Suppress("UNUSED_PARAMETER", "USELESS_CAST")
         fun loadAll(map: Map<String, Any>) {
     ${
                 routerMap.keys.joinToString(System.lineSeparator()) {
@@ -209,7 +208,7 @@ class DRouterLiteSymbolProcessor(
 
     /**
      * 从注解中获取接口的全限定名
-     * FIXME https://github.com/google/ksp/issues/1129
+     * FIXME [issue1129](https://github.com/google/ksp/issues/1129)
      */
     @OptIn(KspExperimental::class)
     private fun getServiceClazzName(annotation: Service) = try {

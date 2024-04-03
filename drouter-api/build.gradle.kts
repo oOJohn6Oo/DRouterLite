@@ -1,10 +1,11 @@
-import org.jetbrains.kotlin.konan.properties.Properties
+import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     id(libs.plugins.androidLibrary.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
     id("localModuleCommonPlugin")
-    id("maven-publish")
+    alias(libs.plugins.kotlin.dokka)
+    alias(libs.plugins.maven.publish)
 }
 
 java {
@@ -32,13 +33,6 @@ android {
     buildFeatures {
         viewBinding = false
     }
-
-    publishing {
-        singleVariant("release"){
-            withJavadocJar()
-            withSourcesJar()
-        }
-    }
 }
 
 dependencies {
@@ -47,31 +41,41 @@ dependencies {
     implementation(libs.androidx.startup)
 
 
-    val localProperties = Properties()
-    localProperties.load(project.rootProject.file("local.properties").inputStream())
-    val routerLocalTest = localProperties["drouter_lite_local_test"].toString().toBooleanStrictOrNull() ?: false
-
-    if(routerLocalTest) {
+    val dRouterLiteLocalTest: Boolean by rootProject.ext
+    if(dRouterLiteLocalTest) {
+        println("drouter-Api local")
         api(project(":drouter-api-annotation"))
     }else{
+        println("drouter-Api remote")
         api(libs.drouter.annotation)
     }
 }
 
-afterEvaluate {
-    publishing{
-        publications {
-            create<MavenPublication>("DRouterLiteAPI") {
-                groupId = "io.john6.router.drouterlite"
-                artifactId = "api"
-                version = "1.0.0-alpha01"
-                from(components["release"])
+mavenPublishing {
+    coordinates("io.github.oojohn6oo", "drouterlite-api", "1.0.0-alpha01")
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+    pom {
+        name.set("DRouterLite-API")
+        description.set("API for DRouterLite")
+        url.set("https://github.com/oOJohn6Oo/DRouterLite")
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
             }
         }
-        repositories {
-            maven("https://jitpack.io"){
-                name = "jitpack"
+        developers {
+            developer {
+                id = "oOJohn6Oo"
+                name = "John6"
+                email = "john6.lq@gmail.com"
             }
+        }
+        scm {
+            connection.set("scm:git:git://github.com/oOJohn6Oo/DRouterLite.git")
+            developerConnection.set("scm:git:ssh://github.com/oOJohn6Oo/DRouterLite.git")
+            url.set("https://github.com/oOJohn6Oo/DRouterLite")
         }
     }
 }
