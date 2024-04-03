@@ -10,6 +10,6 @@ class DRouterLiteSymbolProcessorProvider:SymbolProcessorProvider {
      * Your main logic should be in the SymbolProcessor.process() method.
      */
     override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
-        return DRouterLiteSymbolProcessor(environment.codeGenerator, environment.options)
+        return DRouterLiteSymbolProcessor(environment.codeGenerator, environment.options, environment.logger)
     }
 }

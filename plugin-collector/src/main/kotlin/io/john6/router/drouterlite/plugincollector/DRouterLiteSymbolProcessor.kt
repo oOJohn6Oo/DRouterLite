@@ -15,13 +15,14 @@ fun OutputStream.appendText(str: String) {
 }
 
 /**
- *
+ * DRouterList 注解处理器
  * @param codeGenerator 用于生成与管理文件，不使用此 API 创建的文件将不会参与增量处理或后续编译。
  * @param options 可以获取build.gradle声明的ksp option
  */
 class DRouterLiteSymbolProcessor(
     private val codeGenerator: CodeGenerator,
     private val options: Map<String, String>,
+    private val logger: KSPLogger
 ) : SymbolProcessor {
     private var file: OutputStream? = null
     private var invoked = false
@@ -40,6 +41,7 @@ class DRouterLiteSymbolProcessor(
 
     private fun emit(s: String, indent: String = "") {
         file?.appendText("$indent$s\n")
+        logger.warn("$indent$s")
     }
 
     /**
@@ -58,6 +60,7 @@ class DRouterLiteSymbolProcessor(
         if (allFiles.none()) {
             return emptyList()
         }
+        val ksList = mutableListOf<KSFile>()
         val moduleName = getModuleNameFromFile(allFiles.first()).uppercase()
         file = codeGenerator.createNewFile(
             Dependencies(false),
@@ -70,89 +73,24 @@ class DRouterLiteSymbolProcessor(
 
         if (moduleName.isEmpty()) return emptyList()
 
-        processRouter(resolver, moduleName)
-        processService(resolver, moduleName)
+        processRouter(resolver, ksList)
+        processService(resolver, ksList)
+        writeRouterToFile(ksList, moduleName)
+        writeServiceToFile(ksList, moduleName)
 
         return emptyList()
     }
 
     @OptIn(KspExperimental::class)
-    private fun processService(resolver: Resolver, moduleName: String) {
-
-        val serviceClassFullName = Service::class.qualifiedName ?: return
-
-
-        val ksList = mutableListOf<KSFile>()
-
-        resolver.getSymbolsWithAnnotation(serviceClassFullName).filter {
-            //            it.validate()
-            true
-        }.forEach {
-            val declaration = it as KSClassDeclaration
-            val annotation = it.getAnnotationsByType(Service::class).first()
-            // 获取 接口 的全限定名
-            val interfaceName = getServiceClazzName(annotation) ?: return@forEach
-//            获取 接口 的类型
-            val interfaceType = resolver.getClassDeclarationByName(interfaceName)?.asType(listOf())
-                ?: return@forEach
-            emit("acquire interfaceType Successful")
-            val containingFile = declaration.containingFile
-            if (containingFile != null) {
-                ksList.add(containingFile)
-            }
-            it.accept(
-                DRouterLiteServiceVisitor(file, interfaceName, interfaceType, serviceMap),
-                Unit
-            )
-        }
-
-        emit("service Dependencies fileName:")
-        emit(ksList.joinToString { it.filePath })
-        val fileKt = codeGenerator.createNewFile(
-            Dependencies(true, *ksList.toTypedArray()),
-            "io.john6.router.drouterlite.stub",
-            "${moduleName}ServiceLoader",
-            "kt"
-        )
-        fileKt.appendText(
-            """
-    package io.john6.router.drouterlite.stub
-    
-    import io.john6.router.drouterlite.api.core.ServiceMeta
-    import java.util.HashMap
-    
-    object ${moduleName}ServiceLoader {
-        @Suppress("UNUSED_PARAMETER", "USELESS_CAST")
-        fun loadAll(map: Map<Class<*>, Any>) {
-    ${
-                serviceMap.keys.joinToString(System.lineSeparator()) {
-                    val clazz = serviceMap[it]
-                    "        (map as HashMap)[${it}::class.java] =\n" +
-                            "                object : \n" +
-                            "                     ServiceMeta<$clazz>(${clazz}::class.java){\n" +
-                            "                     override fun newInstance() = ${serviceMap[it]}()\n" +
-                            "                }"
-                }
-            }
-        }
-    }
-    """.trimIndent()
-
-        )
-    }
-
-    @OptIn(KspExperimental::class)
     private fun processRouter(
         resolver: Resolver,
-        moduleName: String
+        ksList: MutableList<KSFile>
     ) {
         val clazzAttType =
             resolver.getClassDeclarationByName("android.app.Activity")?.asType(listOf())
                 ?: return
 
         val routerClassFullName = Router::class.qualifiedName ?: return
-
-        val ksList = mutableListOf<KSFile>()
 
         resolver.getSymbolsWithAnnotation(routerClassFullName).filter {
             //            it.validate()
@@ -175,8 +113,40 @@ class DRouterLiteSymbolProcessor(
                 emit("exception ${e.message}")
             }
         }
-        emit("router Dependencies fileName:")
-        emit(ksList.joinToString { it.filePath })
+    }
+
+    @OptIn(KspExperimental::class)
+    private fun processService(resolver: Resolver, ksList: MutableList<KSFile>) {
+
+        val serviceClassFullName = Service::class.qualifiedName ?: return
+
+        resolver.getSymbolsWithAnnotation(serviceClassFullName).filter {
+            //            it.validate()
+            true
+        }.forEach {
+            val declaration = it as KSClassDeclaration
+            val annotation = it.getAnnotationsByType(Service::class).first()
+            // 获取 接口 的全限定名
+            val interfaceName = getServiceClazzName(annotation) ?: return@forEach
+//            获取 接口 的类型
+            val interfaceType = resolver.getClassDeclarationByName(interfaceName)?.asType(listOf())
+                ?: return@forEach
+            emit("acquire interfaceType Successful")
+            val containingFile = declaration.containingFile
+            if (containingFile != null) {
+                ksList.add(containingFile)
+            }
+            it.accept(
+                DRouterLiteServiceVisitor(file, interfaceName, interfaceType, serviceMap),
+                Unit
+            )
+        }
+    }
+
+    private fun writeRouterToFile(
+        ksList: MutableList<KSFile>,
+        moduleName: String
+    ) {
 
         val fileKt = codeGenerator.createNewFile(
             Dependencies(true, *ksList.toTypedArray()),
@@ -202,6 +172,45 @@ class DRouterLiteSymbolProcessor(
         }
     }
     """.trimIndent()
+
+        )
+    }
+
+    private fun writeServiceToFile(
+        ksList: MutableList<KSFile>,
+        moduleName: String
+    ) {
+        emit("service Dependencies fileName:")
+        emit(ksList.joinToString { it.filePath })
+        val fileKt = codeGenerator.createNewFile(
+            Dependencies(true, *ksList.toTypedArray()),
+            "io.john6.router.drouterlite.stub",
+            "${moduleName}ServiceLoader",
+            "kt"
+        )
+        fileKt.appendText(
+            """
+        package io.john6.router.drouterlite.stub
+        
+        import io.john6.router.drouterlite.api.core.ServiceMeta
+        import java.util.HashMap
+        
+        object ${moduleName}ServiceLoader {
+            @Suppress("UNUSED_PARAMETER", "USELESS_CAST")
+            fun loadAll(map: Map<Class<*>, Any>) {
+        ${
+                serviceMap.keys.joinToString(System.lineSeparator()) {
+                    val clazz = serviceMap[it]
+                    "        (map as HashMap)[${it}::class.java] =\n" +
+                            "                object : \n" +
+                            "                     ServiceMeta<$clazz>(${clazz}::class.java){\n" +
+                            "                     override fun newInstance() = ${serviceMap[it]}()\n" +
+                            "                }"
+                }
+            }
+            }
+        }
+        """.trimIndent()
 
         )
     }
