@@ -2,6 +2,10 @@
 
 使用 [DRouter] API + AGP8.0 API + [KSP] 实现的轻量级 Android 路由框架
 
+----------
+
+**当前 assembler 的 gradle plugin 还未发布，只能本地调试**
+
 ### 实现功能
 
 - [x] Activity 跳转
