@@ -12,6 +12,8 @@ plugins {
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_17
+    withSourcesJar()
+    withJavadocJar()
 }
 
 tasks.withType<KotlinCompile> {
@@ -40,8 +42,8 @@ gradlePlugin {
             // 具体参考 https://docs.gradle.org/current/userguide/plugins.html#sec:plugin_markers
             id = "io.github.oojohn6oo.drouterlite.assembler"
             implementationClass = "io.john6.router.drouterlite.pluginassembler.AssembleRouterByAddingSourcePlugin"
-            displayName = "io.github.oojohn6oo.drouterlite.assembler.gradle.plugin"
-            description = "gradle plugin to assemble router stuff for DRouterLite"
+            displayName = "DRouterLite assemble router plugin"
+            description = "gradle plugin to assemble routers and services in each module"
             tags.set(listOf("android", "router", "android-modularization"))
         }
     }
