@@ -4,8 +4,6 @@
 
 ----------
 
-**当前 assembler 的 gradle plugin 还未发布，只能本地调试**
-
 ### 实现功能
 
 - [x] Activity 跳转
@@ -42,6 +40,16 @@ plugins {
 }
 ```
 
+### 使用
+
+* 添加路由
+    https://github.com/oOJohn6Oo/DRouterLite/blob/f59c2292c855f559560158eb2d02bec5b91d62e8/app/src/main/kotlin/io/john6/router/drouterlite/MainActivity.kt#L24-L25
+* 跳转路由
+    https://github.com/oOJohn6Oo/DRouterLite/blob/f59c2292c855f559560158eb2d02bec5b91d62e8/app/src/main/kotlin/io/john6/router/drouterlite/MainActivity.kt#L65-L71
+* 添加服务
+    https://github.com/oOJohn6Oo/DRouterLite/blob/f59c2292c855f559560158eb2d02bec5b91d62e8/app/src/main/kotlin/io/john6/router/drouterlite/MainActivity.kt#L127-L128
+* 跳转服务
+    https://github.com/oOJohn6Oo/DRouterLite/blob/f59c2292c855f559560158eb2d02bec5b91d62e8/app/src/main/kotlin/io/john6/router/drouterlite/MainActivity.kt#L54
 
 ### 模块说明
 
