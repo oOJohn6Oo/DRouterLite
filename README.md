@@ -1,6 +1,6 @@
 ## 轻量 Android 路由框架
 
-使用 [DRouter] API + AGP8.0 API + [KSP] 实现的轻量级 Android 路由框架
+使用 [DRouter] API + AGP 8.0 API + [KSP] 实现的轻量级 Android 路由框架
 
 ----------
 
