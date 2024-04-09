@@ -9,7 +9,7 @@
 - [x] Activity 跳转
 - [ ] Fragment 跳转 TODO
 - [x] 服务发现
-- [ ] assembler 自动发现应用了 collector 的模块
+- [x] assembler 自动发现应用了 collector 的模块
 
 ### 接入
 
@@ -37,16 +37,6 @@ dependencies {
 ``` kotlin
 plugins {
     id("io.github.oojohn6oo:drouterlite-assembler")
-}
-
-DRouterLite{
-    // 指定打包到最终产物中的路由模块，如果设置了会忽略下面两个属性
-    // 未设置的话，插件会自动探测所有可用模块并加上 [includeModuleName] 最后去除 [excludeModuleName]
-    allModuleName = setOf()
-    // 指定需要添加的模块名，解决自动探测到的模块不全的
-    includeModuleName = setOf()
-    // 指定需要去除的模块名，解决自动探测到的模块并未依赖 collector 导致的编译问题
-    excludeModuleName = setOf()
 }
 ```
 

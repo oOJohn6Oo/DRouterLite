@@ -6,23 +6,34 @@ import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.gradle.AppPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Dependency
 import org.gradle.configurationcache.extensions.capitalized
 
 class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
     override fun apply(project: Project) {
 
+        val availableModuleNameSet = mutableSetOf<String>()
+
         project.plugins.withType(AppPlugin::class.java) {
 
-            val dRouterLiteSetting = project.extensions.create("DRouterLite", DRouterLiteSetting::class.java)
+            // Check all sub project's dependencies
+            project.rootProject.subprojects.forEach { subP->
+                subP.afterEvaluate {
+                    val name = getModuleNameFromFile(subP.name).uppercase()
+                    // TODO All more logic to handle all conditions, like "kspTest"
+                    val dep = subP.configurations.asMap["ksp"]?.dependencies
+                    dep?.forEach {
+                        if (it.checkIfInTestMode() || it.checkIfInReleaseMode()) {
+                            availableModuleNameSet.add(name)
+                        }
+                    }
+                }
+            }
 
+            // Set a task when artifacts build
             val androidComponents =
                 project.extensions.getByType(AndroidComponentsExtension::class.java)
             androidComponents.onVariants { variant ->
-
-
-                val availableModuleNameSet = getAllAvailableModuleName(project, dRouterLiteSetting)
-
-                logV("availableModuleNameList: ${availableModuleNameSet.joinToString()}")
 
                 val taskName = "${variant.name.capitalized()}DRouterLiteAssembleTask"
                 val taskProvider = project.tasks.register(
@@ -41,23 +52,19 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
 
     }
 
-    private fun getAllAvailableModuleName(
-        project: Project,
-        dRouterLiteSetting: DRouterLiteSetting
-    ): Set<String> {
-        val allModuleNameSet = dRouterLiteSetting.allModuleName.ifEmpty {
-            project.rootProject.subprojects.filter {
-                it.buildFile.exists()
-            }.map { it.name } + dRouterLiteSetting.includeModuleName - dRouterLiteSetting.excludeModuleName
-        }
-        return allModuleNameSet.map { getModuleNameFromFile(it).uppercase() }.toSet()
+    private fun Dependency.checkIfInTestMode(): Boolean {
+        return group == "DRouterLite" && name == "plugin-collector" && version == "unspecified"
+    }
+
+    private fun Dependency.checkIfInReleaseMode(): Boolean {
+        return group == "io.github.oojohn6oo" && name == "drouterlite-collector"
     }
 
     private fun getModuleNameFromFile(name: String): String {
         return try {
             name.filter { it in '0'..'9' || it in 'A'..'Z' || it in 'a'..'z' }
         } catch (e: Exception) {
-//            emit("failed to get module name: ${e.message}")
+            logV("failed to get module name: ${e.message}")
             ""
         }
     }
