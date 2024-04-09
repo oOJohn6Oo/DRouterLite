@@ -31,7 +31,7 @@ dependencies{
 }
 
 group = "io.github.oojohn6oo"
-version = "1.0.0-alpha01"
+version = "1.0.0-alpha02"
 
 gradlePlugin {
     website.set("https://github.com/oOJohn6Oo/DRouterLite")
@@ -43,7 +43,7 @@ gradlePlugin {
             id = "io.github.oojohn6oo.drouterlite.assembler"
             implementationClass = "io.john6.router.drouterlite.pluginassembler.AssembleRouterByAddingSourcePlugin"
             displayName = "DRouterLite assemble router plugin"
-            description = "gradle plugin to assemble routers and services in each module"
+            description = "Gradle plugin to assemble routers and services in each module"
             tags.set(listOf("android", "router", "android-modularization"))
         }
     }

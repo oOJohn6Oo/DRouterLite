@@ -11,7 +11,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePaddingRelative
 import io.john6.router.drouterlite.api.DRouterLite
 import io.john6.router.drouterlite.annotation.Router
 import io.john6.router.drouterlite.annotation.Service
@@ -37,6 +40,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(mBinding.root)
 
         initView()
+
+        ViewCompat.setOnApplyWindowInsetsListener(mBinding.root){v,insets->
+            val systemBarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            mBinding.toolbar.updatePaddingRelative(top = mBinding.toolbar.bottom + systemBarInsets.top)
+            mBinding.root.updatePaddingRelative(bottom = systemBarInsets.bottom)
+            insets
+        }
     }
 
     private fun initView() {

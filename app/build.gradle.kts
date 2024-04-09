@@ -39,17 +39,6 @@ android {
     }
 }
 
-DRouterLite{
-    this.excludeModuleName = setOf(
-        "drouter-api",
-        "drouter-api-stub",
-        "drouter-api-annotation",
-        "plugin-assembler",
-        "plugin-collector",
-        "plugin-common-module"
-    )
-}
-
 dependencies {
     implementation(libs.material)
     runtimeOnly(project(":out:mylibrary"))
