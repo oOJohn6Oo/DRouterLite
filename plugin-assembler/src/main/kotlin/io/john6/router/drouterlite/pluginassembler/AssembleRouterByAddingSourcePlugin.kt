@@ -17,16 +17,20 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
         project.plugins.withType(AppPlugin::class.java) {
 
             // Check all sub project's dependencies
-            project.rootProject.subprojects.forEach { subP->
-                subP.afterEvaluate {
-                    val name = getModuleNameFromFile(subP.name).uppercase()
-                    // TODO All more logic to handle all conditions, like "kspTest"
-                    val dep = subP.configurations.asMap["ksp"]?.dependencies
-                    dep?.forEach {
-                        if (it.checkIfInTestMode() || it.checkIfInReleaseMode()) {
-                            availableModuleNameSet.add(name)
+            project.rootProject.subprojects.filter { it.buildFile.exists() }.forEach { subP->
+                try {
+                    subP.afterEvaluate {
+                        val name = getModuleNameFromFile(subP.name).uppercase()
+                        // TODO All more logic to handle all conditions, like "kspTest"
+                        val dep = subP.configurations.asMap["ksp"]?.dependencies
+                        dep?.forEach {
+                            if (it.checkIfMatchLocalCollector() || it.checkIfMatchRemoteCollector()) {
+                                availableModuleNameSet.add(name)
+                            }
                         }
                     }
+                } catch (e: Exception) {
+                    logV("error: ${e.message} on project named '${subP.name}'")
                 }
             }
 
@@ -52,11 +56,11 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
 
     }
 
-    private fun Dependency.checkIfInTestMode(): Boolean {
+    private fun Dependency.checkIfMatchLocalCollector(): Boolean {
         return group == "DRouterLite" && name == "plugin-collector" && version == "unspecified"
     }
 
-    private fun Dependency.checkIfInReleaseMode(): Boolean {
+    private fun Dependency.checkIfMatchRemoteCollector(): Boolean {
         return group == "io.github.oojohn6oo" && name == "drouterlite-collector"
     }
 
