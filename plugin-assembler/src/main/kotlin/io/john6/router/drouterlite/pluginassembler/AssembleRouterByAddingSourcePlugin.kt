@@ -4,6 +4,7 @@ import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.internal.tasks.factory.dependsOn
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
@@ -12,25 +13,23 @@ import org.gradle.configurationcache.extensions.capitalized
 class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
     override fun apply(project: Project) {
 
-        val availableModuleNameSet = mutableSetOf<String>()
+        val haveCollectorModuleSet = mutableSetOf<String>()
+
+        project.tasks.getByPath("").outputs.files
 
         project.plugins.withType(AppPlugin::class.java) {
 
+            logV("start of project named '${project.name}'")
+
             // Check all sub project's dependencies
-            project.rootProject.subprojects.filter { it.buildFile.exists() }.forEach { subP->
-                try {
-                    subP.afterEvaluate {
-                        val name = getModuleNameFromFile(subP.name).uppercase()
-                        // TODO All more logic to handle all conditions, like "kspTest"
-                        val dep = subP.configurations.asMap["ksp"]?.dependencies
-                        dep?.forEach {
-                            if (it.checkIfMatchLocalCollector() || it.checkIfMatchRemoteCollector()) {
-                                availableModuleNameSet.add(name)
-                            }
-                        }
+            project.rootProject.subprojects.filter { it.buildFile.exists() }.forEach { subP ->
+                subP.afterEvaluate {
+                    val res = it.configurations.asMap["ksp"]?.dependencies?.find { dep ->
+                        dep.matchRemoteCollector() || dep.matchLocalCollector()
                     }
-                } catch (e: Exception) {
-                    logV("error: ${e.message} on project named '${subP.name}'")
+                    if (res != null) {
+                        haveCollectorModuleSet.add(subP.name)
+                    }
                 }
             }
 
@@ -38,12 +37,15 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
             val androidComponents =
                 project.extensions.getByType(AndroidComponentsExtension::class.java)
             androidComponents.onVariants { variant ->
+                val variantName = variant.name
 
-                val taskName = "${variant.name.capitalized()}DRouterLiteAssembleTask"
+                val taskName = "${variantName.capitalized()}DRouterLiteAssembleTask"
                 val taskProvider = project.tasks.register(
                     taskName,
                     AssembleRouterByAddingSourceTask::class.java,
-                    availableModuleNameSet,
+                    project.name,
+                    haveCollectorModuleSet,
+                    variant.runtimeConfiguration
                 )
 
 //                NOT WORK when just generate .kt files
@@ -56,22 +58,14 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
 
     }
 
-    private fun Dependency.checkIfMatchLocalCollector(): Boolean {
-        return group == "DRouterLite" && name == "plugin-collector" && version == "unspecified"
+    private fun Dependency.matchLocalCollector(): Boolean {
+        return group?.startsWith("DRouterLite") ?: false && name == "plugin-collector" && version == "unspecified"
     }
 
-    private fun Dependency.checkIfMatchRemoteCollector(): Boolean {
+    private fun Dependency.matchRemoteCollector(): Boolean {
         return group == "io.github.oojohn6oo" && name == "drouterlite-collector"
     }
 
-    private fun getModuleNameFromFile(name: String): String {
-        return try {
-            name.filter { it in '0'..'9' || it in 'A'..'Z' || it in 'a'..'z' }
-        } catch (e: Exception) {
-            logV("failed to get module name: ${e.message}")
-            ""
-        }
-    }
 
     fun logV(msg: Any) {
         println("\u001b[36m$msg\u001b[0m")
