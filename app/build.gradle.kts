@@ -37,11 +37,27 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    flavorDimensions.add("area")
+
+    productFlavors {
+        create("cn"){
+            dimension = "area"
+            isDefault = true
+        }
+        create("global"){
+            dimension = "area"
+        }
+    }
 }
+
+val cnRuntimeOnly by configurations
+val globalRuntimeOnly by configurations
 
 dependencies {
     implementation(libs.material)
-    runtimeOnly(project(":out:mylibrary"))
+//    cnRuntimeOnly(project(":out:mylibrary"))
+    globalRuntimeOnly(project(":out:mylibrary"))
 
     val dRouterLiteLocalTest: Boolean by rootProject.ext
     if(dRouterLiteLocalTest) {

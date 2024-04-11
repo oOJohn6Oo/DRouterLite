@@ -1,19 +1,23 @@
 package io.john6.router.drouterlite.pluginassembler
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.NamedDomainObjectProvider
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.artifacts.ResolvedDependency
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.OutputDirectories
 import org.gradle.api.tasks.TaskAction
-import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
-import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 
 abstract class AssembleRouterByAddingSourceTask @Inject constructor(
-    private val moduleNameSet: Set<String>,
+    private val projectName: String,
+    private val hasCollectorModuleSet: Set<String>,
+    // FIXME Cause compile error when configuration cache is on
+    private val rc: Configuration,
 ) :
     DefaultTask() {
 
@@ -25,12 +29,54 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
     fun taskAction() {
         logV("output dir path is ${generatedDir.get().asFile.absolutePath}")
 
-        collectRouter(moduleNameSet)
-        collectService(moduleNameSet)
+        logV(System.lineSeparator())
+        logV("haveCollectorModuleSet")
+        logV(hasCollectorModuleSet.joinToString())
+
+        val allModuleInvolvedInThisCompile = mutableSetOf(projectName)
+        getAllModuleName(
+            rc.resolvedConfiguration.firstLevelModuleDependencies,
+            allModuleInvolvedInThisCompile,
+        )
+        logV(System.lineSeparator())
+        logV("all modules involves in this compile")
+        logV(allModuleInvolvedInThisCompile.joinToString())
+
+
+        val finalModuleList = hasCollectorModuleSet.filter {
+            allModuleInvolvedInThisCompile.contains(it)
+        }.map { getModuleNameFromFile(it) }
+
+        logV(System.lineSeparator())
+        logV("final modules to generate router")
+        logV(finalModuleList.joinToString())
+
+        collectRouter(finalModuleList)
+        collectService(finalModuleList)
 
     }
 
-    private fun collectRouter(allModuleNameSet: Set<String>) {
+    private fun getModuleNameFromFile(name: String): String {
+        return try {
+            name.filter { it in '0'..'9' || it in 'A'..'Z' || it in 'a'..'z' }.uppercase()
+        } catch (e: Exception) {
+            logV("failed to get module name: ${e.message}")
+            ""
+        }
+    }
+    private fun getAllModuleName(
+        dep: Collection<ResolvedDependency>,
+        allModuleSet: MutableSet<String>,
+    ) {
+        dep.filter { it.moduleGroup.startsWith("DRouterLite") }.forEach {
+            allModuleSet.add(it.moduleName)
+            val desireChildDep = it.children.filter {cd-> cd.moduleVersion ==  "unspecified" }
+
+            getAllModuleName(desireChildDep, allModuleSet)
+        }
+    }
+
+    private fun collectRouter(allModuleNameSet: Collection<String>) {
         val name = "RouterLoader"
         val routerFile =
             File(generatedDir.get().asFile, "io/john6/router/drouterlite/stub/$name.class")
@@ -46,7 +92,7 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
         }
     }
 
-    private fun collectService(allModuleNameSet: Set<String>) {
+    private fun collectService(allModuleNameSet: Collection<String>) {
         val name = "ServiceLoader"
         val serviceFile =
             File(generatedDir.get().asFile, "io/john6/router/drouterlite/stub/${name}.class")

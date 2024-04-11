@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mylibrary"
+    namespace = "com.example.mylibrary2"
     compileSdk = 34
 
     defaultConfig {
@@ -41,17 +41,16 @@ android {
 dependencies {
 
     implementation(libs.material)
-    implementation(project(":out:mylibrary2"))
 
     val dRouterLiteLocalTest: Boolean by rootProject.ext
     if(dRouterLiteLocalTest) {
-        println("mylib local")
+        println("mylib2 local")
         // 路由 API
         implementation(project(":drouter-api"))
         // 路由收集插件
         ksp(project(":plugin-collector"))
     }else{
-        println("mylib remote")
+        println("mylib2 remote")
         implementation(libs.drouter.api)
         ksp(libs.drouter.collector)
     }
