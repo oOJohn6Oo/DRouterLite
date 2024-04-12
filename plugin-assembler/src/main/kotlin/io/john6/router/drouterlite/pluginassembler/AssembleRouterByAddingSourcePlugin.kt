@@ -15,11 +15,7 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
 
         val haveCollectorModuleSet = mutableSetOf<String>()
 
-        project.tasks.getByPath("").outputs.files
-
         project.plugins.withType(AppPlugin::class.java) {
-
-            logV("start of project named '${project.name}'")
 
             // Check all sub project's dependencies
             project.rootProject.subprojects.filter { it.buildFile.exists() }.forEach { subP ->
