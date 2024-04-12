@@ -14,6 +14,7 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 abstract class AssembleRouterByAddingSourceTask @Inject constructor(
+    private val rootProjectName: String,
     private val projectName: String,
     private val hasCollectorModuleSet: Set<String>,
     // FIXME Cause compile error when configuration cache is on
@@ -42,7 +43,7 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
             allModuleInvolvedInThisCompile,
         )
         logV(System.lineSeparator())
-        logV("all modules involves in this compile")
+        logV("all modules involves in this ${rc.name} compile")
         logV(allModuleInvolvedInThisCompile.joinToString())
 
 
@@ -71,7 +72,7 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
         dep: Collection<ResolvedDependency>,
         allModuleSet: MutableSet<String>,
     ) {
-        dep.filter { it.moduleGroup.startsWith("DRouterLite") }.forEach {
+        dep.filter { it.moduleGroup.startsWith(rootProjectName) }.forEach {
             allModuleSet.add(it.moduleName)
             val desireChildDep = it.children.filter {cd-> cd.moduleVersion ==  "unspecified" }
 

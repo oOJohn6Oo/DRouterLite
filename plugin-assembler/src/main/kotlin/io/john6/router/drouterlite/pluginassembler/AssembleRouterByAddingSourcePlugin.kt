@@ -39,6 +39,7 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
                 val taskProvider = project.tasks.register(
                     taskName,
                     AssembleRouterByAddingSourceTask::class.java,
+                    project.rootProject.name,
                     project.name,
                     haveCollectorModuleSet,
                     variant.runtimeConfiguration
