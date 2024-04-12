@@ -24,6 +24,9 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
     @get:OutputDirectories
     abstract val generatedDir: DirectoryProperty
 
+    override fun isCompatibleWithConfigurationCache(): Boolean {
+        return false
+    }
 
     @TaskAction
     fun taskAction() {
