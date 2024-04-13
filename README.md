@@ -9,7 +9,7 @@
 - [x] Activity 跳转
 - [ ] Fragment 跳转 TODO
 - [x] 服务发现
-- [x] assembler 自动发现应用了 collector 的模块
+- [ ] 支持 Configuration Cache
 
 ### 接入
 
@@ -36,7 +36,7 @@ dependencies {
 
 ``` kotlin
 plugins {
-    id("io.github.oojohn6oo:drouterlite-assembler")
+    id("io.github.oojohn6oo:drouterlite-assembler") version "1.0.0-alpha04"
 }
 ```
 
