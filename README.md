@@ -10,6 +10,7 @@
 - [ ] Fragment 跳转 TODO
 - [x] 服务发现
 - [ ] 支持 Configuration Cache
+- [ ] 隐藏 DRouterLite 非必要 API
 
 ### 接入
 
