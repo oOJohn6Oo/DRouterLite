@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import android.util.SparseArray
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher

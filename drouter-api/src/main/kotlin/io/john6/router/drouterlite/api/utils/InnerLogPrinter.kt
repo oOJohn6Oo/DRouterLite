@@ -2,7 +2,7 @@ package io.john6.router.drouterlite.api.utils
 
 import android.util.Log
 
-class InnerLogPrinter : ILogPrinter {
+internal class InnerLogPrinter : ILogPrinter {
 
     override fun d(tag: String, content: String) {
         Log.d(tag, content)

@@ -52,7 +52,7 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates("io.github.oojohn6oo", "drouterlite-api", "1.0.0-alpha01")
+    coordinates("io.github.oojohn6oo", "drouterlite-api", "1.0.0-alpha02")
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
     pom {

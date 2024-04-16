@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.android.material.button.MaterialButton
 import io.john6.router.drouterlite.annotation.Router
 import io.john6.router.drouterlite.annotation.Service

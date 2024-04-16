@@ -1,11 +1,9 @@
 package io.john6.router.drouterlite.api.utils
 
 import android.util.Log
-import androidx.annotation.RestrictTo
 import io.john6.router.drouterlite.api.DRouterLite
 
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-object DRouterLiteLogger{
+internal object DRouterLiteLogger{
     const val CORE_TAG = "DRouterCore"
     private val printer = InnerLogPrinter()
 

@@ -2,7 +2,6 @@ package io.john6.router.drouterlite.api
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
-import androidx.annotation.RestrictTo
 import io.john6.router.drouterlite.stub.RouterLoader
 import io.john6.router.drouterlite.api.core.RouterMeta
 import io.john6.router.drouterlite.api.core.RouterRequest
@@ -12,8 +11,7 @@ import io.john6.router.drouterlite.api.utils.DRouterLiteLogger.CORE_TAG
 import io.john6.router.drouterlite.stub.ServiceLoader
 import java.lang.ref.SoftReference
 
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-class DRouterLite(
+class DRouterLite internal constructor(
     val mApp: Application,
 ) {
     val isDebug: Boolean = isDebuggable()
@@ -41,27 +39,30 @@ class DRouterLite(
         return res
     }
 
-    fun getRouterMetaByPath(path:String): RouterMeta? {
-        return routerMap[path]
+    internal fun getRouterMetaByPath(path:String): RouterMeta? {
+        val res = routerMap[path]
+        DRouterLiteLogger.d(CORE_TAG, "DRouterLite $path get router: $res")
+        return res
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getServiceClassByClass(clazz: Class<T>): T? {
+    internal fun <T> getServiceClassByClass(clazz: Class<T>): T? {
         val cacheInstance = serviceInstanceCacheMap[clazz]?.get()
         if(cacheInstance != null){
+            DRouterLiteLogger.d(CORE_TAG, "DRouterLite $clazz get cache service: ${cacheInstance::class.java}")
             return cacheInstance as? T
         }
         val newInstance = serviceMap[clazz]?.newInstance() as? T
         if(newInstance != null){
             serviceInstanceCacheMap[clazz] = SoftReference(newInstance)
         }
+        DRouterLiteLogger.d(CORE_TAG, "DRouterLite $clazz get new service: ${newInstance?.let { it::class.java }}")
         return newInstance
     }
 
     companion object{
 
-        @RestrictTo(RestrictTo.Scope.LIBRARY)
-        lateinit var instance: DRouterLite
+        internal lateinit var instance: DRouterLite
 
         fun <T> build(clazz: Class<T>): T? {
             return instance.getServiceClassByClass(clazz)

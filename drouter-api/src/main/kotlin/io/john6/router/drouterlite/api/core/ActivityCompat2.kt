@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Pair
 import android.util.SparseArray
-import androidx.annotation.RestrictTo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import io.john6.router.drouterlite.api.utils.Extend
@@ -19,7 +18,6 @@ import java.util.concurrent.atomic.AtomicInteger
 /**
  * Created by gaowei on 2018/9/12
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 class ActivityCompat2 private constructor(private val active: Active) {
     // start index, will not change when rotation or recycle
     private var cur = 0
