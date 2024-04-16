@@ -17,7 +17,7 @@
 1. 在 base 模块依赖 `drouter-lite-api`
 
 ``` kotlin
-api("io.github.oojohn6oo:drouterlite-api:1.0.0-alpha01")
+api("io.github.oojohn6oo:drouterlite-api:1.0.0-alpha02")
 
 ```
 
