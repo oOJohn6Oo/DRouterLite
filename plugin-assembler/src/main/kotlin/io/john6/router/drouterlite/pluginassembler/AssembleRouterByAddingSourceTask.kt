@@ -1,9 +1,6 @@
 package io.john6.router.drouterlite.pluginassembler
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.NamedDomainObjectProvider
-import org.gradle.api.artifacts.Configuration
-import org.gradle.api.artifacts.ResolvedDependency
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.OutputDirectories
 import org.gradle.api.tasks.TaskAction
@@ -14,11 +11,8 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 
 abstract class AssembleRouterByAddingSourceTask @Inject constructor(
-    private val rootProjectName: String,
-    private val projectName: String,
-    private val hasCollectorModuleSet: Set<String>,
-    // FIXME Cause compile error when configuration cache is on
-    private val rc: Configuration,
+    private val haveCollectorModules: Set<String>,
+    private val involvedInThisCompileModules:Set<String>
 ) :
     DefaultTask() {
 
@@ -35,20 +29,15 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
 
         logV(System.lineSeparator())
         logV("haveCollectorModuleSet")
-        logV(hasCollectorModuleSet.joinToString())
+        logV(involvedInThisCompileModules.joinToString())
 
-        val allModuleInvolvedInThisCompile = mutableSetOf(projectName)
-        getAllModuleName(
-            rc.resolvedConfiguration.firstLevelModuleDependencies,
-            allModuleInvolvedInThisCompile,
-        )
         logV(System.lineSeparator())
-        logV("all modules involves in this ${rc.name} compile")
-        logV(allModuleInvolvedInThisCompile.joinToString())
+        logV("all modules involves in this compile")
+        logV(haveCollectorModules.joinToString())
 
 
-        val finalModuleList = hasCollectorModuleSet.filter {
-            allModuleInvolvedInThisCompile.contains(it)
+        val finalModuleList = involvedInThisCompileModules.filter {
+            haveCollectorModules.contains(it)
         }.map { getModuleNameFromFile(it) }
 
         logV(System.lineSeparator())
@@ -68,17 +57,7 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
             ""
         }
     }
-    private fun getAllModuleName(
-        dep: Collection<ResolvedDependency>,
-        allModuleSet: MutableSet<String>,
-    ) {
-        dep.filter { it.moduleGroup.startsWith(rootProjectName) }.forEach {
-            allModuleSet.add(it.moduleName)
-            val desireChildDep = it.children.filter {cd-> cd.moduleVersion ==  "unspecified" }
 
-            getAllModuleName(desireChildDep, allModuleSet)
-        }
-    }
 
     private fun collectRouter(allModuleNameSet: Collection<String>) {
         val name = "RouterLoader"
@@ -168,9 +147,5 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
         mv.visitEnd()
 
         return cw.toByteArray()
-    }
-
-    fun logV(msg: Any) {
-        println("\u001b[36m$msg\u001b[0m")
     }
 }
