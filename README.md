@@ -9,8 +9,8 @@
 - [x] Activity 跳转
 - [ ] Fragment 跳转 TODO
 - [x] 服务发现
-- [ ] 支持 Configuration Cache
-- [ ] 隐藏 DRouterLite 非必要 API
+- [x] 支持 Configuration Cache
+- [x] 隐藏 DRouterLite 非必要 API
 
 ### 接入
 
@@ -29,7 +29,7 @@ plugins {
 }
 ...
 dependencies {
-    ksp("io.github.oojohn6oo:drouterlite-collector:1.0.0-alpha04")
+    ksp("io.github.oojohn6oo:drouterlite-collector:1.0.0-alpha05")
 }
 
 ```
