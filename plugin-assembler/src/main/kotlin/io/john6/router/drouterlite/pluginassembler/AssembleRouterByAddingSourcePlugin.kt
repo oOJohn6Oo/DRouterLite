@@ -4,27 +4,24 @@ import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.gradle.AppPlugin
-import com.android.build.gradle.internal.tasks.factory.dependsOn
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.Dependency
 import org.gradle.configurationcache.extensions.capitalized
 
 class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
     override fun apply(project: Project) {
 
-        val haveCollectorModuleSet = mutableSetOf<String>()
+        val haveCollectorModules = mutableSetOf<String>()
 
         project.plugins.withType(AppPlugin::class.java) {
 
             // Check all sub project's dependencies
             project.rootProject.subprojects.filter { it.buildFile.exists() }.forEach { subP ->
                 subP.afterEvaluate {
-                    val res = it.configurations.asMap["ksp"]?.dependencies?.find { dep ->
-                        dep.matchRemoteCollector() || dep.matchLocalCollector()
-                    }
-                    if (res != null) {
-                        haveCollectorModuleSet.add(subP.name)
+                    it.configurations.asMap["ksp"]?.dependencies?.forEach { dep->
+                        if(dep.matchRemoteCollector() || dep.matchLocalCollector()){
+                            haveCollectorModules.add(subP.name)
+                        }
                     }
                 }
             }
@@ -33,16 +30,24 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
             val androidComponents =
                 project.extensions.getByType(AndroidComponentsExtension::class.java)
             androidComponents.onVariants { variant ->
+
+                val involvedInThisCompileModules = mutableSetOf(project.name)
+                variant.runtimeConfiguration.incoming.afterResolve {
+                    getAllInvolvedModuleName(
+                        variant.runtimeConfiguration.resolvedConfiguration.firstLevelModuleDependencies,
+                        involvedInThisCompileModules,
+                        project.rootProject.name
+                    )
+                }
+
                 val variantName = variant.name
 
                 val taskName = "${variantName.capitalized()}DRouterLiteAssembleTask"
                 val taskProvider = project.tasks.register(
                     taskName,
                     AssembleRouterByAddingSourceTask::class.java,
-                    project.rootProject.name,
-                    project.name,
-                    haveCollectorModuleSet,
-                    variant.runtimeConfiguration
+                    haveCollectorModules,
+                    involvedInThisCompileModules
                 )
 
 //                NOT WORK when just generate .kt files
@@ -53,14 +58,6 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
             }
         }
 
-    }
-
-    private fun Dependency.matchLocalCollector(): Boolean {
-        return group?.startsWith("DRouterLite") ?: false && name == "plugin-collector" && version == "unspecified"
-    }
-
-    private fun Dependency.matchRemoteCollector(): Boolean {
-        return group == "io.github.oojohn6oo" && name == "drouterlite-collector"
     }
 
 
