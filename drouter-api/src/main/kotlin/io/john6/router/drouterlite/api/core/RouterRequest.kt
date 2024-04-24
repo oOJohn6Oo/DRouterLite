@@ -41,6 +41,7 @@ class RouterRequest private constructor(var path: String){
               launcher: ActivityResultLauncher<Intent>? = null,
               callback: RouterCallback? = null,
     ) {
+        if(!DRouterLite.isAlreadyInit()) return
         this.context = context ?: DRouterLite.instance.mApp
         val routerMeta = DRouterLite.instance.getRouterMetaByPath(path)
         if (routerMeta == null) {

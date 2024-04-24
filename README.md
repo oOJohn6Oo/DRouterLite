@@ -17,7 +17,7 @@
 1. 在 base 模块依赖 `drouter-lite-api`
 
 ``` kotlin
-api("io.github.oojohn6oo:drouterlite-api:1.0.0-alpha02")
+api("io.github.oojohn6oo:drouterlite-api:1.0.0-alpha03")
 
 ```
 
@@ -29,7 +29,7 @@ plugins {
 }
 ...
 dependencies {
-    ksp("io.github.oojohn6oo:drouterlite-collector:1.0.0-alpha06")
+    ksp("io.github.oojohn6oo:drouterlite-collector:1.0.0-alpha04")
 }
 
 ```
@@ -37,7 +37,7 @@ dependencies {
 
 ``` kotlin
 plugins {
-    id("io.github.oojohn6oo:drouterlite-assembler") version "1.0.0-alpha04"
+    id("io.github.oojohn6oo:drouterlite-assembler") version "1.0.0-alpha06"
 }
 ```
 

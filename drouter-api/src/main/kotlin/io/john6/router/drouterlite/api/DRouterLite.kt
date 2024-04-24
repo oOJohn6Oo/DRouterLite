@@ -65,11 +65,15 @@ class DRouterLite internal constructor(
         internal lateinit var instance: DRouterLite
 
         fun <T> build(clazz: Class<T>): T? {
+            if (!isAlreadyInit()) return null
             return instance.getServiceClassByClass(clazz)
         }
 
         fun build(path: String): RouterRequest {
+            if (!isAlreadyInit()) return RouterRequest.build("")
             return RouterRequest.build(path)
         }
+
+        fun isAlreadyInit() = this::instance.isInitialized
     }
 }
