@@ -1,18 +1,19 @@
 [versions]
-agp = "8.3.1"
-kotlin = "1.9.20"
+agp = "8.4.1"
+kotlin = "2.0.0"
+kotlin-dokka = "1.9.20"
 appcompat = "1.6.1"
-material = "1.11.0"
+material = "1.12.0"
 kotlin-poet = "1.16.0"
-kotlin-ksp = "1.9.20-1.0.14"
-kotlin-dsl = "4.2.1"
+kotlin-ksp = "2.0.0-1.0.21"
+kotlin-dsl = "4.3.0"
 androidx-startup = "1.1.1"
 gradle-publish = "1.2.1"
-drouter-collector = "1.0.0-alpha04"
+drouter-collector = "1.0.0-alpha05"
 drouter-assembler = "1.0.0-alpha06"
 drouter-api = "1.0.0-alpha03"
 drouter-api-annotation = "1.0.0-alpha01"
-core-ktx = "1.12.0"
+core-ktx = "1.13.1"
 junit = "4.13.2"
 junit-version = "1.1.5"
 espresso-core = "3.5.1"
@@ -44,7 +45,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-dsl = { id = "org.gradle.kotlin.kotlin-dsl", version.ref = "kotlin-dsl" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
-kotlin-dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin" }
+kotlin-dokka = { id = "org.jetbrains.dokka", version.ref = "kotlin-dokka" }
 gradle-publish = { id = "com.gradle.plugin-publish", version.ref = "gradle-publish" }
 drouter-assembler = {id = "io.github.oojohn6oo.drouterlite.assembler", version.ref = "drouter-assembler"}
 maven-publish = {id = "com.vanniktech.maven.publish", version.ref = "maven-publish"}

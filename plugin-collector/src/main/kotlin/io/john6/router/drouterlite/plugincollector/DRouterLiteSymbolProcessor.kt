@@ -41,7 +41,7 @@ class DRouterLiteSymbolProcessor(
 
     private fun emit(s: String, indent: String = "") {
         file?.appendText("$indent$s\n")
-        logger.warn("$indent$s")
+//        logger.warn("$indent$s")
     }
 
     /**
@@ -62,12 +62,12 @@ class DRouterLiteSymbolProcessor(
         }
         val ksList = mutableListOf<KSFile>()
         val moduleName = getModuleNameFromFile(allFiles.first()).uppercase()
-        file = codeGenerator.createNewFile(
-            Dependencies(false),
-            "",
-            "${moduleName}MyRouterSymbolProcessor",
-            "log"
-        )
+//        file = codeGenerator.createNewFile(
+//            Dependencies(false),
+//            "",
+//            "${moduleName}MyRouterSymbolProcessor",
+//            "log"
+//        )
         emit("TestProcessor: init($options)", "")
         invoked = true
 

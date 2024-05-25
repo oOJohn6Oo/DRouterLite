@@ -29,7 +29,7 @@ plugins {
 }
 ...
 dependencies {
-    ksp("io.github.oojohn6oo:drouterlite-collector:1.0.0-alpha04")
+    ksp("io.github.oojohn6oo:drouterlite-collector:1.0.0-alpha05")
 }
 
 ```

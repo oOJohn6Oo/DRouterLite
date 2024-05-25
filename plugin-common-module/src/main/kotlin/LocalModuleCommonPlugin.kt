@@ -2,9 +2,11 @@ import com.android.build.gradle.BaseExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("unused")
@@ -37,8 +39,8 @@ class LocalModuleCommonPlugin: Plugin<Project>{
             buildFeatures.viewBinding = true
 
             project.tasks.withType<KotlinCompile>{
-                kotlinOptions {
-                    jvmTarget = "17"
+                compilerOptions {
+                    jvmTarget = JvmTarget.JVM_17
                 }
             }
 

@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.vanniktech.maven.publish.SonatypeHost
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -13,8 +14,8 @@ java {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "17"
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
     }
 }
 
@@ -29,7 +30,7 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates("io.github.oojohn6oo", "drouterlite-collector", "1.0.0-alpha04")
+    coordinates("io.github.oojohn6oo", "drouterlite-collector", "1.0.0-alpha05")
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
     pom {

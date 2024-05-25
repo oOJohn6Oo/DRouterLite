@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 repositories {
@@ -17,8 +18,8 @@ java {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "17"
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
     }
 }
 
