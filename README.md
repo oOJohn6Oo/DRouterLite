@@ -37,7 +37,7 @@ dependencies {
 
 ``` kotlin
 plugins {
-    id("io.github.oojohn6oo:drouterlite-assembler") version "1.0.0-alpha06"
+    id("io.github.oojohn6oo:drouterlite-assembler") version "1.0.0-alpha07"
 }
 ```
 

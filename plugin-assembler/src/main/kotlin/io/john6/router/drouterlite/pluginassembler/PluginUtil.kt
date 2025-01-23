@@ -2,6 +2,7 @@ package io.john6.router.drouterlite.pluginassembler
 
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.ResolvedDependency
+import org.gradle.api.Project
 
 internal fun Dependency.matchLocalCollector(): Boolean {
     return group?.startsWith("DRouterLite") ?: false && name == "plugin-collector" && version == "unspecified"
@@ -25,6 +26,14 @@ internal fun Dependency.isLocalModule(): Boolean {
 
 internal fun ResolvedDependency.isLocalModule(): Boolean {
     return moduleVersion == "unspecified"
+}
+
+internal fun Project.queryDependencies(action: (projectName: String) -> Unit) {
+    configurations.asMap["ksp"]?.dependencies?.forEach { dep ->
+        if (dep.matchRemoteCollector() || dep.matchLocalCollector()) {
+            action(this.name)
+        }
+    }
 }
 
 fun getAllInvolvedModuleName(

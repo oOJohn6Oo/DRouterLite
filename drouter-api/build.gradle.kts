@@ -8,11 +8,6 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
 android {
     namespace = "io.john6.router.drouterlite.api"
 
