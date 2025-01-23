@@ -32,7 +32,7 @@ dependencies{
 }
 
 group = "io.github.oojohn6oo"
-version = "1.0.0-alpha06"
+version = "1.0.0-alpha07"
 
 gradlePlugin {
     website.set("https://github.com/oOJohn6Oo/DRouterLite")

@@ -17,13 +17,15 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
 
             // Check all sub project's dependencies
             project.rootProject.subprojects.filter { it.buildFile.exists() }.forEach { subP ->
-                subP.afterEvaluate {
-                    it.configurations.asMap["ksp"]?.dependencies?.forEach { dep->
-                        if(dep.matchRemoteCollector() || dep.matchLocalCollector()){
-                            haveCollectorModules.add(subP.name)
-                        }
+
+                if (subP.state.executed) {
+                    subP.queryDependencies{haveCollectorModules.add(it) }
+                }else{
+                    subP.afterEvaluate {
+                        it.queryDependencies{name-> haveCollectorModules.add(name)}
                     }
                 }
+
             }
 
             // Set a task when artifacts build
@@ -42,7 +44,7 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
 
                 val variantName = variant.name
 
-                val taskName = "${variantName.capitalized()}DRouterLiteAssembleTask"
+                val taskName = "${variantName.cap()}DRouterLiteAssembleTask"
                 val taskProvider = project.tasks.register(
                     taskName,
                     AssembleRouterByAddingSourceTask::class.java,
@@ -60,6 +62,8 @@ class AssembleRouterByAddingSourcePlugin : Plugin<Project> {
 
     }
 
+
+    private fun String.cap() = this.replaceFirstChar { it.uppercase() }
 
     fun logV(msg: Any) {
         println("\u001b[36m$msg\u001b[0m")

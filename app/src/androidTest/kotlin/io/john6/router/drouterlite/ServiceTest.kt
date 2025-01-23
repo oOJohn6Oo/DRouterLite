@@ -31,6 +31,7 @@ class ServiceTest {
         onView(withId(R.id.btn_service)).perform(click())
         val content = MainActivity.CONTENT_SERVICE_MESSAGE
         Assert.assertNotNull(content)
+        Thread.sleep(1000L)
         onView(withText(content))
             .inRoot(ToastMatcher())
             .check(ViewAssertions.matches(isDisplayed()))
