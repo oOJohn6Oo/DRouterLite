@@ -4,6 +4,7 @@ plugins {
     id(libs.plugins.kotlin.android.get().pluginId)
     // 统一配置插件
     id("localModuleCommonPlugin")
+//    id("io.github.oojohn6oo.drouterlite.assembler")
     // 路由组装插件
     alias(libs.plugins.drouter.assembler)
 }

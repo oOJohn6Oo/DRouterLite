@@ -5,6 +5,8 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.tasks.OutputDirectories
 import org.gradle.api.tasks.TaskAction
 import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.Label
+import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import java.io.File
 import java.io.FileOutputStream
@@ -12,7 +14,6 @@ import javax.inject.Inject
 
 abstract class AssembleRouterByAddingSourceTask @Inject constructor(
     private val haveCollectorModules: Set<String>,
-    private val involvedInThisCompileModules:Set<String>
 ) :
     DefaultTask() {
 
@@ -25,24 +26,13 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
 
         logV(System.lineSeparator())
         logV("haveCollectorModuleSet")
-        logV(involvedInThisCompileModules.joinToString())
-
-        logV(System.lineSeparator())
-        logV("all modules involves in this compile")
         logV(haveCollectorModules.joinToString())
 
 
-        val finalModuleList = involvedInThisCompileModules.filter {
-            haveCollectorModules.contains(it)
-        }.map { getModuleNameFromFile(it) }
-
-        logV(System.lineSeparator())
-        logV("final modules to generate router")
-        logV(finalModuleList.joinToString())
+        val finalModuleList = haveCollectorModules.map { getModuleNameFromFile(it) }
 
         collectRouter(finalModuleList)
         collectService(finalModuleList)
-
     }
 
     private fun getModuleNameFromFile(name: String): String {
@@ -125,15 +115,17 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
         )
         clazzList.forEach {
             val owner = "${packageName}/$it"
-            mv.visitFieldInsn(Opcodes.GETSTATIC, owner, "INSTANCE", "L$owner;")
-            mv.visitVarInsn(Opcodes.ALOAD, 1)
-            mv.visitMethodInsn(
-                Opcodes.INVOKEVIRTUAL,
-                owner,
-                "loadAll",
-                "(Ljava/util/Map;)V",
-                false
-            )
+            mv.wrapWithTryCatch {
+                mv.visitFieldInsn(Opcodes.GETSTATIC, owner, "INSTANCE", "L$owner;")
+                mv.visitVarInsn(Opcodes.ALOAD, 1)
+                mv.visitMethodInsn(
+                    Opcodes.INVOKEVIRTUAL,
+                    owner,
+                    "loadAll",
+                    "(Ljava/util/Map;)V",
+                    false
+                )
+            }
 
         }
         mv.visitInsn(Opcodes.RETURN)
@@ -143,5 +135,33 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
         mv.visitEnd()
 
         return cw.toByteArray()
+    }
+
+
+    fun MethodVisitor.wrapWithTryCatch(block: MethodVisitor.() -> Unit) {
+        val start = Label()
+        val end = Label()
+        val handler = Label()
+        val skip = Label()
+
+        // try 开始
+        visitLabel(start)
+
+        // 中间逻辑
+        block()
+
+        // try 结束
+        visitLabel(end)
+        visitJumpInsn(Opcodes.GOTO, skip)
+
+        // catch(Throwable)
+        visitLabel(handler)
+        visitInsn(Opcodes.POP) // 异常丢掉
+
+        // 继续执行
+        visitLabel(skip)
+
+        // 注册 try-catch 块
+        visitTryCatchBlock(start, end, handler, "java/lang/Throwable")
     }
 }
