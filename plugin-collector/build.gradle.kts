@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -31,9 +30,7 @@ dependencies {
 
 mavenPublishing {
     coordinates("io.github.oojohn6oo", "drouterlite-collector", "1.0.0-alpha05")
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-    signAllPublications()
-    pom {
+        pom {
         name.set("DRouterLite-Collector")
         description.set("Android Router collector for DRouterLite using ksp")
         url.set("https://github.com/oOJohn6Oo/DRouterLite")

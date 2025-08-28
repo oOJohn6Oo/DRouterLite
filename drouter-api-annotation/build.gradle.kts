@@ -1,4 +1,3 @@
-import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -20,9 +19,7 @@ tasks.withType<KotlinCompile>{
 
 mavenPublishing {
     coordinates("io.github.oojohn6oo", "drouterlite-annotation", "1.0.0-alpha01")
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-    signAllPublications()
-    pom {
+        pom {
         name.set("DRouterLite-API-Annotation")
         description.set("Annotation for DRouterLite")
         url.set("https://github.com/oOJohn6Oo/DRouterLite")

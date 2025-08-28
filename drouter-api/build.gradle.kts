@@ -1,5 +1,3 @@
-import com.vanniktech.maven.publish.SonatypeHost
-
 plugins {
     id(libs.plugins.androidLibrary.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
@@ -48,9 +46,7 @@ dependencies {
 
 mavenPublishing {
     coordinates("io.github.oojohn6oo", "drouterlite-api", "1.0.0-alpha03")
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-    signAllPublications()
-    pom {
+        pom {
         name.set("DRouterLite-API")
         description.set("API for DRouterLite")
         url.set("https://github.com/oOJohn6Oo/DRouterLite")
