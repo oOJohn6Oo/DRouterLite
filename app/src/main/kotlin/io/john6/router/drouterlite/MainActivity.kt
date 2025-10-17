@@ -14,6 +14,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import io.john6.router.drouterlite.api.DRouterLite
 import io.john6.router.drouterlite.annotation.Router
 import io.john6.router.drouterlite.annotation.Service
@@ -24,7 +25,7 @@ import kotlin.random.Random
 
 
 @Router(path = "/main")
-class MainActivity : AppCompatActivity() {
+class MainActivity : FragmentActivity() {
 
     private lateinit var mLauncher: ActivityResultLauncher<Intent>
     private lateinit var mBinding: CommonLayoutBinding

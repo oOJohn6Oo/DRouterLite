@@ -1,7 +1,9 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+
 plugins {
     id(libs.plugins.androidLibrary.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
-    id("localModuleCommonPlugin")
     alias(libs.plugins.kotlin.dokka)
     alias(libs.plugins.maven.publish)
 }
@@ -9,6 +11,7 @@ plugins {
 android {
     namespace = "io.john6.router.drouterlite.api"
 
+    compileSdk = 34
     defaultConfig {
         minSdk = 11
     }
@@ -25,6 +28,19 @@ android {
 
     buildFeatures {
         viewBinding = false
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
+            apiVersion = KotlinVersion.KOTLIN_2_0
+            languageVersion = KotlinVersion.KOTLIN_2_0
+        }
     }
 }
 
@@ -45,7 +61,7 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates("io.github.oojohn6oo", "drouterlite-api", "1.0.0-alpha04")
+    coordinates("io.github.oojohn6oo", "drouterlite-api", "1.0.0-alpha05")
         pom {
         name.set("DRouterLite-API")
         description.set("API for DRouterLite")

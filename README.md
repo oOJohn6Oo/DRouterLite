@@ -17,7 +17,7 @@
 1. 在 base 模块依赖 `drouter-lite-api`
 
 ``` kotlin
-api("io.github.oojohn6oo:drouterlite-api:1.0.0-alpha04")
+api("io.github.oojohn6oo:drouterlite-api:1.0.0-alpha05")
 
 ```
 
@@ -47,6 +47,7 @@ plugins {
     https://github.com/oOJohn6Oo/DRouterLite/blob/f59c2292c855f559560158eb2d02bec5b91d62e8/app/src/main/kotlin/io/john6/router/drouterlite/MainActivity.kt#L24-L25
 * 跳转路由
     https://github.com/oOJohn6Oo/DRouterLite/blob/f59c2292c855f559560158eb2d02bec5b91d62e8/app/src/main/kotlin/io/john6/router/drouterlite/MainActivity.kt#L65-L71
+    https://github.com/oOJohn6Oo/DRouterLite/blob/6713605151a11d8ac60b24956acb8f608bff5dbe/app/src/main/kotlin/io/john6/router/drouterlite/MainActivity.kt#L63-L66
 * 添加服务
     https://github.com/oOJohn6Oo/DRouterLite/blob/f59c2292c855f559560158eb2d02bec5b91d62e8/app/src/main/kotlin/io/john6/router/drouterlite/MainActivity.kt#L127-L128
 * 跳转服务

@@ -25,6 +25,7 @@ android {
 
     buildTypes {
         release {
+            isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -50,6 +51,10 @@ android {
             dimension = "area"
         }
     }
+    androidResources {
+        localeFilters += setOf("en")
+    }
+
 }
 
 val cnRuntimeOnly by configurations

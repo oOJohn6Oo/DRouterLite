@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CERouter</string>
+    <string name="app_name">DRouterLite</string>
 
     <string name="btn_next">Next</string>
     <string name="btn_fragment">Show DialogFragment</string>
