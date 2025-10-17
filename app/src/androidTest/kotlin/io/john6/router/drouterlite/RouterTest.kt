@@ -15,7 +15,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.john6.router.drouterlite.api.core.RouterResult
+import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -66,44 +66,43 @@ class RouterTest {
 
         Thread.sleep(1000L)
         onView(ViewMatchers.isRoot()).perform(ViewActions.pressBack())
-        // check toast shows
-        onView(withText(Activity.RESULT_CANCELED.toString()))
-            .inRoot(ToastMatcher())
-            .check(matches(isDisplayed()))
+        onView(withId(R.id.content)).check(matches(withText(containsString(Activity.RESULT_CANCELED.toString()))))
     }
 
-    @Test(timeout = 6000L)
+    @Test(timeout = 12000L)
     fun jump_using_launcher_with_callback_test(){
         Intents.init()
         onView(withId(R.id.check_box_nav_with_callback)).check(matches(isNotChecked()))
             .perform(click())
         onView(withId(R.id.check_box_nav_using_launcher)).check(matches(isNotChecked()))
             .perform(click())
-        Thread.sleep(1000L)
         onView(withId(R.id.btn_next)).perform(click())
         val intent = Intents.getIntents()[0]
         Intents.release()
         router_destination_is_right_test(intent)
         router_callback_result_test(intent)
         // press back to finish the activity
-        Thread.sleep(3000L)
+        Thread.sleep(1000L)
         onView(ViewMatchers.isRoot()).perform(ViewActions.pressBack())
-        // check toast shows
-        onView(withText(Activity.RESULT_CANCELED.toString()))
-            .inRoot(ToastMatcher())
+        onView(withId(R.id.content)).check(matches(withText(containsString(Activity.RESULT_CANCELED.toString()))))
+    }
+
+    @Test(timeout = 2000L)
+    fun show_dialog_fragment_test(){
+        onView(withId(R.id.btn_fragment)).perform(click())
+        Thread.sleep(1000L)
+        onView(withText(containsString("Hello DRouterLite")))
             .check(matches(isDisplayed()))
     }
 
     private fun router_callback_result_test(intent: Intent) {
         val extras = intent.extras
         Assert.assertNotNull(extras)
-        val content = extras!!.getString("content")
+        val content = extras?.getString("content")
         Assert.assertEquals(MainActivity.CONTENT_CALLBACK_TEST, content)
 
         // check toast shows
-        onView(withText(RouterResult.SUCCESS.toString()))
-            .inRoot(ToastMatcher())
-            .check(matches(isDisplayed()))
+        onView(withId(R.id.content)).check(matches(withText(containsString(MainActivity.CONTENT_CALLBACK_TEST))))
     }
 
     private fun router_destination_is_right_test(intent: Intent){
@@ -113,7 +112,7 @@ class RouterTest {
     private fun router_with_extra_is_intact_test(intent: Intent) {
         val extras = intent.extras
         Assert.assertNotNull(extras)
-        val content = extras!!.getString("content")
+        val content = extras?.getString("content")
 
         val desireExtras = Bundle().apply {
             putAll(MainActivity.test_bundle)

@@ -30,9 +30,9 @@ android {
 
 dependencies {
     compileOnly(project(":drouter-api-stub"))
+    compileOnly(libs.kotlin.stdlib)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.startup)
-
 
     val dRouterLiteLocalTest: Boolean by rootProject.ext
     if(dRouterLiteLocalTest) {
@@ -45,7 +45,7 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates("io.github.oojohn6oo", "drouterlite-api", "1.0.0-alpha03")
+    coordinates("io.github.oojohn6oo", "drouterlite-api", "1.0.0-alpha04")
         pom {
         name.set("DRouterLite-API")
         description.set("API for DRouterLite")

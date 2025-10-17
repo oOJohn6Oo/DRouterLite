@@ -20,13 +20,14 @@ internal object RouterDispatcher {
     ) {
         DRouterLiteLogger.d(
             CORE_TAG,
-            "request \"%s\", class \"%s\" start execute",
-            routerRequest.number,
+            "class \"%s\" start execute",
             meta.clazz.simpleName
         )
         when (meta.routerType) {
             RouterType.ACTIVITY -> startActivity(routerRequest, meta, callback)
-            RouterType.FRAGMENT -> startFragment(routerRequest, meta, callback)
+            RouterType.FRAGMENT -> {
+                DRouterLiteLogger.d(CORE_TAG, "Please use getFragment instead",)
+            }
             else -> {}
         }
     }
@@ -75,22 +76,22 @@ internal object RouterDispatcher {
         callback?.onResult(RouterResult(RouterResult.SUCCESS, meta.clazz))
     }
 
-    private fun startFragment(
+    fun getFragment(
         routerRequest: RouterRequest,
         meta: RouterMeta,
         callback: RouterCallback?
-    ) {
-
-        var desireFragment: Fragment? = null
-
-        if (routerRequest.bundle.getBoolean(Extend.START_FRAGMENT_NEW_INSTANCE, true)) {
-            desireFragment = meta.clazz.getDeclaredConstructor().newInstance() as? Fragment
-            desireFragment?.setArguments(routerRequest.bundle)
-        }
-        callback?.onResult(RouterResult(RouterResult.SUCCESS, meta.clazz, desireFragment))
+    ): Fragment? {
+        val desireFragment = meta.clazz.getDeclaredConstructor().newInstance() as? Fragment
+        desireFragment?.setArguments(routerRequest.bundle)
+        callback?.onResult(RouterResult(RouterResult.SUCCESS, meta.clazz))
+        return desireFragment
     }
 
     fun onRouterNotFound(callback: RouterCallback?) {
         callback?.onResult(RouterResult())
+    }
+
+    fun onDRouteNotInit(callback: RouterCallback?) {
+        callback?.onResult(RouterResult(RouterResult.NOT_INIT))
     }
 }

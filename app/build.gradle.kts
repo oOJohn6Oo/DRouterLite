@@ -57,8 +57,9 @@ val globalRuntimeOnly by configurations
 
 dependencies {
     implementation(libs.material)
-//    cnRuntimeOnly(project(":out:mylibrary"))
+    cnRuntimeOnly(project(":out:mylibrary"))
     globalRuntimeOnly(project(":out:mylibrary"))
+    androidTestImplementation(libs.uiautomator)
 
     val dRouterLiteLocalTest: Boolean by rootProject.ext
     if(dRouterLiteLocalTest) {

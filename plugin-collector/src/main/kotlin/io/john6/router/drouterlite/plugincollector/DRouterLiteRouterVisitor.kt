@@ -10,7 +10,8 @@ class DRouterLiteRouterVisitor(
     private val file: OutputStream?,
     private val path: String,
     private val typeAtt: KSType,
-    private val map: HashMap<String, String>
+    private val typeFragment: KSType?,
+    private val map: HashMap<String, Pair<Int, String>>,
 ) : KSVisitorVoid() {
 
     private fun emit(s: String, indent: String = "") {
@@ -37,10 +38,13 @@ class DRouterLiteRouterVisitor(
     override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
         if (checkVisited(classDeclaration)) return
         val classType = classDeclaration.asType(listOf())
-        if(typeAtt.isAssignableFrom(classType)){
+        val type = if(typeAtt.isAssignableFrom(classType)) 1
+        else if(typeFragment?.isAssignableFrom(classType) == true) 2
+        else 0
+        if(type != 0){
             val className = classDeclaration.simpleName.getShortName()
             val classFullName = classDeclaration.packageName.asString() + "." + className
-            map[path] = classFullName
+            map[path] = type to classFullName
         }
     }
 

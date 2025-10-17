@@ -26,14 +26,4 @@ object Extend {
      */
     const val START_ACTIVITY_REQUEST_CODE = "router_start_activity_request_code"
 
-    /**
-     * value:Boolean，Used for Fragment, whether create fragment instance, default true.
-     */
-    const val START_FRAGMENT_NEW_INSTANCE = "router_start_fragment_new_instance"
-
-    /**
-     * value:Boolean，Used for View, whether create fragment instance, default true.
-     */
-    const val START_VIEW_NEW_INSTANCE = "router_start_view_new_instance"
-
 }

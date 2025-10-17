@@ -2,6 +2,7 @@
     <string name="app_name">CERouter</string>
 
     <string name="btn_next">Next</string>
+    <string name="btn_fragment">Show DialogFragment</string>
     <string name="btn_call_service">Call Service</string>
     <string name="nav_with_callback">With Callback</string>
     <string name="nav_using_launcher">Using Launcher</string>

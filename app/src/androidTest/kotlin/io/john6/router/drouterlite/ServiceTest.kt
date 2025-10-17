@@ -1,14 +1,15 @@
 package io.john6.router.drouterlite
 
+import android.app.Activity
 import android.os.Build
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.Matchers.containsString
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -32,8 +33,6 @@ class ServiceTest {
         val content = MainActivity.CONTENT_SERVICE_MESSAGE
         Assert.assertNotNull(content)
         Thread.sleep(1000L)
-        onView(withText(content))
-            .inRoot(ToastMatcher())
-            .check(ViewAssertions.matches(isDisplayed()))
+        onView(withId(R.id.content)).check(matches(withText(containsString(content))))
     }
 }

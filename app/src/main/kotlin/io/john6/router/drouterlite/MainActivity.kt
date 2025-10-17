@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.SparseArray
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
@@ -14,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePaddingRelative
+import androidx.fragment.app.DialogFragment
 import io.john6.router.drouterlite.api.DRouterLite
 import io.john6.router.drouterlite.annotation.Router
 import io.john6.router.drouterlite.annotation.Service
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            Toast.makeText(this, it.resultCode.toString(), Toast.LENGTH_SHORT).show()
+            changeContent("Result from launcher: ${it.resultCode}")
         }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(mBinding.root){v,insets->
             val systemBarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            mBinding.toolbar.updatePaddingRelative(top = mBinding.toolbar.bottom + systemBarInsets.top)
+            mBinding.toolbar.updatePaddingRelative(top = mBinding.toolbar.paddingBottom + systemBarInsets.top)
             mBinding.root.updatePaddingRelative(bottom = systemBarInsets.bottom)
             insets
         }
@@ -58,6 +58,12 @@ class MainActivity : AppCompatActivity() {
             }else{
                 justNavigate(usingLauncher)
             }
+        }
+        mBinding.btnFragment.setOnClickListener {
+            val dialog = DRouterLite.build("/mylibrary/test_dialog").withExtras {
+                putString("msg", "Hello DRouterLite")
+            }.getFragment()
+            (dialog as? DialogFragment)?.show(supportFragmentManager, "testDialog")
         }
         mBinding.btnService.setOnClickListener {
             DRouterLite.build(IMainService::class.java)?.test(this, CONTENT_SERVICE_MESSAGE)
@@ -88,9 +94,13 @@ class MainActivity : AppCompatActivity() {
                 if(usingLauncher) mLauncher else null,
                 object : RouterCallback {
                 override fun onResult(result: RouterResult) {
-                    Toast.makeText(this@MainActivity, result.statusCode.toString(), Toast.LENGTH_SHORT).show()
+                    changeContent("callback: ${result.statusCode}")
                 }
             })
+    }
+
+    fun changeContent(content: String){
+        mBinding.content.text = content
     }
 
     companion object {
@@ -136,7 +146,7 @@ class MainActivity : AppCompatActivity() {
 @Service(clazz = IMainService::class)
 class MainServiceImpl : IMainService {
     override fun test(context: Context, msg: String) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+        (context as MainActivity).changeContent("service called: $msg")
     }
 }
 

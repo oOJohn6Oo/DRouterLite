@@ -19,3 +19,12 @@ plugins {
     alias(libs.plugins.maven.publish) apply false
     alias(libs.plugins.kotlin.dokka) apply false
 }
+
+
+subprojects {
+    configurations.all {
+        resolutionStrategy{
+            force(libs.kotlin.stdlib)
+        }
+    }
+}

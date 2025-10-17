@@ -80,7 +80,7 @@ abstract class AssembleRouterByAddingSourceTask @Inject constructor(
 
     private fun generateClass(clazzList: List<String>, name: String): ByteArray {
         val packageName = "io/john6/router/drouterlite/stub"
-        val cw = ClassWriter(0)
+        val cw = ClassWriter(ClassWriter.COMPUTE_FRAMES)
         // 定义一个 RouterLoader 类
         cw.visit(
             Opcodes.V1_8,

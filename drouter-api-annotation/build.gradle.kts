@@ -1,5 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -11,14 +11,20 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-tasks.withType<KotlinCompile>{
+kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.JVM_17
+        apiVersion = KotlinVersion.KOTLIN_2_0
+        languageVersion = KotlinVersion.KOTLIN_2_0
     }
 }
 
+dependencies{
+    compileOnly(libs.kotlin.stdlib)
+}
+
 mavenPublishing {
-    coordinates("io.github.oojohn6oo", "drouterlite-annotation", "1.0.0-alpha01")
+    coordinates("io.github.oojohn6oo", "drouterlite-annotation", "1.0.0-alpha02")
         pom {
         name.set("DRouterLite-API-Annotation")
         description.set("Annotation for DRouterLite")

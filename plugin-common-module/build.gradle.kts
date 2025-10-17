@@ -1,12 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-repositories {
-    google()
-    mavenCentral()
-}
 plugins {
-    alias(libs.plugins.kotlin.dsl)
+    `kotlin-dsl`
 }
 
 java {
@@ -14,18 +9,18 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-tasks.withType<KotlinCompile> {
+kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.JVM_17
     }
 }
 
 dependencies {
+    compileOnly(libs.kotlin.stdlib)
     compileOnly(libs.gradle)
     //添加Gradle相关的API，否则无法自定义Plugin和Task
     implementation(gradleApi())
     implementation(libs.kotlin.gradlePlugin)
-//    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10")
 }
 
 gradlePlugin {

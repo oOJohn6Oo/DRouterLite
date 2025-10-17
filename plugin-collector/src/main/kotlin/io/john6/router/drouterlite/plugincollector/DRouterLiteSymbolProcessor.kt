@@ -29,9 +29,9 @@ class DRouterLiteSymbolProcessor(
 
     /**
      * key: path
-     * value: class qualifiedName
+     * value: Type to class qualifiedName 1 Activity； 2 Fragment
      */
-    private val routerMap = hashMapOf<String, String>()
+    private val routerMap = hashMapOf<String, Pair<Int, String>>()
 
     /**
      * key: interface qualifiedName
@@ -89,6 +89,8 @@ class DRouterLiteSymbolProcessor(
         val clazzAttType =
             resolver.getClassDeclarationByName("android.app.Activity")?.asType(listOf())
                 ?: return
+        val clazzFragmentType =
+            resolver.getClassDeclarationByName("androidx.fragment.app.Fragment")?.asType(listOf())
 
         val routerClassFullName = Router::class.qualifiedName ?: return
 
@@ -107,7 +109,7 @@ class DRouterLiteSymbolProcessor(
                     if (containingFile != null) {
                         ksList.add(containingFile)
                     }
-                    it.accept(DRouterLiteRouterVisitor(file, path, clazzAttType, routerMap), Unit)
+                    it.accept(DRouterLiteRouterVisitor(file, path, clazzAttType, clazzFragmentType, routerMap), Unit)
                 }
             } catch (e: Exception) {
                 emit("exception ${e.message}")
@@ -166,7 +168,10 @@ class DRouterLiteSymbolProcessor(
         fun loadAll(map: Map<String, Any>) {
     ${
                 routerMap.keys.joinToString(System.lineSeparator()) {
-                    "        (map as HashMap)[\"$it\"] = RouterMeta(\"$it\", 1, ${routerMap[it]}::class.java)"
+                    val type2Clazz = routerMap[it]!!
+                    val type = type2Clazz.first
+                    val clazz = type2Clazz.second
+                    "        (map as HashMap)[\"$it\"] = RouterMeta(\"$it\", ${type}, ${clazz}::class.java)"
                 }
             }
         }

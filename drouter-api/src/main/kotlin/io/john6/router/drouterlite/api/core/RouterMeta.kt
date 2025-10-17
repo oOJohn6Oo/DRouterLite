@@ -5,6 +5,6 @@ package io.john6.router.drouterlite.api.core
  */
 data class RouterMeta(
     val path:String,
-    @RouterType val routerType: Int,
+    @param:RouterType val routerType: Int,
     val clazz:Class<*>
 )

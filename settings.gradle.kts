@@ -18,7 +18,6 @@ dependencyResolutionManagement {
         mavenLocal()
         google()
         mavenCentral()
-        mavenLocal()
     }
 }
 includeBuild("plugin-assembler")

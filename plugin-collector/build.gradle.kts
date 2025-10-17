@@ -1,5 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -12,13 +12,16 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-tasks.withType<KotlinCompile> {
+kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.JVM_17
+        apiVersion = KotlinVersion.KOTLIN_2_0
+        languageVersion = KotlinVersion.KOTLIN_2_0
     }
 }
 
 dependencies {
+    compileOnly(libs.kotlin.stdlib)
     implementation(libs.kotlin.ksp)
     val dRouterLiteLocalTest: Boolean by rootProject.ext
     if (dRouterLiteLocalTest) {
@@ -29,7 +32,7 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates("io.github.oojohn6oo", "drouterlite-collector", "1.0.0-alpha05")
+    coordinates("io.github.oojohn6oo", "drouterlite-collector", "1.0.0-alpha06")
         pom {
         name.set("DRouterLite-Collector")
         description.set("Android Router collector for DRouterLite using ksp")

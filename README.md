@@ -7,7 +7,7 @@
 ### 实现功能
 
 - [x] Activity 跳转
-- [ ] Fragment 跳转 TODO
+- [x] Fragment 跳转
 - [x] 服务发现
 - [x] 支持 Configuration Cache
 - [x] 隐藏 DRouterLite 非必要 API
@@ -17,7 +17,7 @@
 1. 在 base 模块依赖 `drouter-lite-api`
 
 ``` kotlin
-api("io.github.oojohn6oo:drouterlite-api:1.0.0-alpha03")
+api("io.github.oojohn6oo:drouterlite-api:1.0.0-alpha04")
 
 ```
 
@@ -29,7 +29,7 @@ plugins {
 }
 ...
 dependencies {
-    ksp("io.github.oojohn6oo:drouterlite-collector:1.0.0-alpha05")
+    ksp("io.github.oojohn6oo:drouterlite-collector:1.0.0-alpha06")
 }
 
 ```
@@ -37,7 +37,7 @@ dependencies {
 
 ``` kotlin
 plugins {
-    id("io.github.oojohn6oo:drouterlite-assembler") version "1.0.0-alpha07"
+    id("io.github.oojohn6oo:drouterlite-assembler") version "1.0.0-alpha10"
 }
 ```
 

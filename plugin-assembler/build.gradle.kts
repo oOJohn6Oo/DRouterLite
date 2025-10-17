@@ -1,10 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
-repositories {
-    mavenCentral()
-    google()
-}
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.gradle.publish)
@@ -17,14 +13,16 @@ java {
     withJavadocJar()
 }
 
-tasks.withType<KotlinCompile> {
+kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.JVM_17
+        apiVersion = KotlinVersion.KOTLIN_2_0
+        languageVersion = KotlinVersion.KOTLIN_2_0
     }
 }
 
 dependencies{
-
+    compileOnly(libs.kotlin.stdlib)
     compileOnly(libs.gradle)
     //添加Gradle相关的API，否则无法自定义Plugin和Task
     implementation(gradleApi())
@@ -32,7 +30,7 @@ dependencies{
 }
 
 group = "io.github.oojohn6oo"
-version = "1.0.0-alpha09"
+version = "1.0.0-alpha10"
 
 gradlePlugin {
     website.set("https://github.com/oOJohn6Oo/DRouterLite")
