@@ -1,6 +1,5 @@
 package io.john6.router.drouterlite
 
-import android.app.Activity
 import android.os.Build
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
